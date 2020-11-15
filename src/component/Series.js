@@ -7,11 +7,12 @@ import {
   Text,
   ActivityIndicator,
   RefreshControl,
+  TouchableOpacity,
 } from 'react-native';
 import Const from '../util/Const';
 
 class Series extends Component {
-  constructor() {
+  constructor({navigation}) {
     super();
     this.state = {
       data: [],
@@ -48,13 +49,15 @@ class Series extends Component {
 
   renderItem(data) {
     return (
-      <View style={styles.itemView}>
-        <Image
-          style={{width: '100%', height: 150}}
-          source={{uri: getUrlThumb(data)}}
-        />
-        <Text style={styles.text}>{data.title}</Text>
-      </View>
+      <TouchableOpacity onPress={() => this.actionClick(data)}>
+        <View style={styles.itemView}>
+          <Image
+            style={{width: '100%', height: 150}}
+            source={{uri: getUrlThumb(data)}}
+          />
+          <Text style={styles.text}>{data.title}</Text>
+        </View>
+      </TouchableOpacity>
     );
   }
 
@@ -64,8 +67,7 @@ class Series extends Component {
         style={{
           height: 2,
           alignSelf: 'center',
-          width: '80%',
-          backgroundColor: '#CED0CE',
+          backgroundColor: '#fff',
         }}
       />
     );
@@ -87,11 +89,16 @@ class Series extends Component {
     this.setState({data: [], isLoading: true, offset: 0}); // true isRefreshing flag for enable pull to refresh indicator
     this.loadDataFromApi(0);
   }
+
   handleLoadmore = () => {
     if (!this.state.isLoading) {
       this.loadDataFromApi(this.state.offset);
     }
   };
+
+  actionClick(item) {
+    this.props.navigation.navigate('ComicSeries', {data: item});
+  }
 
   render() {
     const {data, isLoading, offset} = this.state;
@@ -125,14 +132,14 @@ class Series extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: {width: '100%'},
-  text: {color: 'black', fontSize: 16},
+  container: {width: '100%', backgroundColor: 'black'},
+  text: {color: 'white', fontSize: 16, marginTop: 5},
   itemView: {
     alignSelf: 'center',
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 5,
-    width: '80%',
+    width: '90%',
     marginTop: 10,
   },
   footer: {
@@ -147,6 +154,8 @@ const styles = StyleSheet.create({
 function queryString(offset) {
   return objToQueryString({
     orderBy: '-modified',
+    seriesType: 'collection',
+    contains: 'comic',
     limit: 10,
     offset: offset,
     ts: Const.TS,

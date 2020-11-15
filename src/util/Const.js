@@ -6,6 +6,7 @@ class Const {
   static HASH_KEY = md5(this.TS + Const.PRIVATE_KEY + Const.PUBLIC_KEY);
   static BASE_URL = 'https://gateway.marvel.com/v1/public/';
   static SERIES = 'series';
+  static COMIC = 'comic';
 }
 
 export default Const;

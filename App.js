@@ -8,15 +8,27 @@
 
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-
+import {createStackNavigator} from '@react-navigation/stack';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Series from './src/component/Series';
-
+import ComicSeries from './src/component/ComicSeries';
+import {NavigationContainer} from '@react-navigation/native';
+const Stack = createStackNavigator();
 const App: () => React$Node = () => {
   return (
-    <View>
-      <Series />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Series"
+          component={Series}
+          options={{
+            title: '',
+            headerTransparent: true,
+          }}
+        />
+        <Stack.Screen name="ComicSeries" component={ComicSeries} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 
